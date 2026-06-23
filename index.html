@@ -406,6 +406,21 @@
             box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
         }
 
+        /* 广告位 */
+        #ad-container {
+            width: 100%;
+            min-height: 90px;
+            background: #1a1a2e;
+            border: 2px dashed #444;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+
         /* 群像图横幅 */
         .roster-banner {
             width: 100%;
@@ -530,6 +545,13 @@
                 <button class="tab-btn ${activeTab === '普通技' ? 'active' : ''}" onclick="switchTab('普通技')">普通技</button>
                 <button class="tab-btn ${activeTab === '必杀技' ? 'active' : ''}" onclick="switchTab('必杀技')">必杀技</button>
                 <button class="tab-btn ${activeTab === 'SA / 必杀技' ? 'active' : ''}" onclick="switchTab('SA / 必杀技')">SA / 超必杀</button>
+            </div>
+        `;
+
+        // 广告位
+        html += `
+            <div id="ad-container">
+                广告位招商
             </div>
         `;
 
