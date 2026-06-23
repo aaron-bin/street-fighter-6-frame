@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>街霸6 帧数速查网</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 顶部标题栏 */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-bottom: 2px solid #00d4ff;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            height: 60px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .header h1 {
+            font-size: 22px;
+            background: linear-gradient(90deg, #00d4ff, #b44dff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: nowrap;
+            text-shadow: none;
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 16px 8px 36px;
+            background: #1a1a2e;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+        }
+
+        /* 主体布局 */
+        .main {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+
+        /* 左侧角色列表 */
+        .sidebar {
+            width: 220px;
+            min-width: 220px;
+            background: #0f0f1a;
+            border-right: 1px solid #1e1e3a;
+            overflow-y: auto;
+            padding: 12px 0;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #0f0f1a;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+
+        .sidebar-title {
+            padding: 8px 16px;
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .char-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .char-item:hover {
+            background: #1a1a2e;
+            border-left-color: #b44dff;
+        }
+
+        .char-item.active {
+            background: #1a1a2e;
+            border-left-color: #00d4ff;
+            box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+
+        .char-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            border: 2px solid #333;
+        }
+
+        .char-item.active .char-avatar {
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+        }
+
+        .char-info {
+            flex: 1;
+        }
+
+        .char-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #e0e0e0;
+        }
+
+        .char-name-en {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* 右侧内容区 */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            background: #0a0a0f;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .char-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #1e1e3a;
+        }
+
+        .char-header-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 2px solid #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .char-header-info h2 {
+            font-size: 28px;
+            background: linear-gradient(90deg, #00d4ff, #b44dff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .char-header-info p {
+            color: #888;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* 招式分类标题 */
+        .section-title {
+            font-size: 18px;
+            color: #ffd700;
+            margin: 24px 0 12px 0;
+            padding-left: 12px;
+            border-left: 3px solid #ffd700;
+        }
+
+        /* 数据表格 */
+        .frame-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        .frame-table thead th {
+            background: #1a1a2e;
+            color: #00d4ff;
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #00d4ff;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .frame-table tbody tr {
+            border-bottom: 1px solid #1e1e3a;
+            transition: background 0.2s;
+        }
+
+        .frame-table tbody tr:hover {
+            background: #1a1a2e;
+        }
+
+        .frame-table tbody td {
+            padding: 10px 14px;
+            font-size: 14px;
+        }
+
+        .frame-table tbody td:first-child {
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+
+        .frame-table tbody td:nth-child(2) {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .frame-table tbody td:nth-child(3) {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        /* 帧数优势颜色 */
+        .adv-positive {
+            color: #00ff88 !important;
+        }
+
+        .adv-negative {
+            color: #ff4444 !important;
+        }
+
+        .adv-zero {
+            color: #888 !important;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 60vh;
+            color: #444;
+        }
+
+        .empty-state .icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+        }
+
+        /* 注释标签 */
+        .note-tag {
+            display: inline-block;
+            background: rgba(180, 77, 255, 0.2);
+            color: #b44dff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        /* 数据说明 */
+        .data-note {
+            margin-top: 32px;
+            padding: 12px 16px;
+            background: #1a1a2e;
+            border-left: 3px solid #b44dff;
+            border-radius: 0 6px 6px 0;
+            font-size: 12px;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        /* 角色颜色主题 */
+        .theme-ryu { --accent: #ff6b35; }
+        .theme-juri { --accent: #b44dff; }
+        .theme-ken { --accent: #ff4444; }
+        /* Tab 切换样式 */
+        .tab-container {
+            display: flex;
+            gap: 0;
+            margin-bottom: 20px;
+            background: #1a1a2e;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover {
+            color: #e0e0e0;
+            background: #222244;
+        }
+
+        .tab-btn.active {
+            color: #00d4ff;
+            background: #16213e;
+            border-bottom-color: #00d4ff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 角色头像 */
+        .char-avatar-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #333;
+            flex-shrink: 0;
+        }
+
+        .char-item.active .char-avatar-img {
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+        }
+
+        .char-header-avatar-img {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            border: 2px solid #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        /* 群像图横幅 */
+        .roster-banner {
+            width: 100%;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            border-radius: 0;
+            margin-bottom: 0;
+            border: none;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .roster-banner img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+            object-position: center center;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部栏 -->
+    <div class="header">
+        <h1>🎮 街霸6 帧数速查网</h1>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="搜索角色名称..." autocomplete="off">
+        </div>
+        <div style="color: #666; font-size: 12px;">按 ESC 清除搜索</div>
+    </div>
+
+    <!-- 主体 -->
+    <div class="main">
+        <!-- 左侧角色列表 -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-title">选择角色</div>
+        </div>
+
+        <!-- 右侧内容 -->
+        <div class="content" id="content">
+            <div class="roster-banner">
+                <img src="https://cdn.akamai.steamstatic.com/steam/apps/1364780/capsule_616x353.jpg" alt="Street Fighter 6 Roster" onerror="this.parentElement.style.background='linear-gradient(135deg, #ff6b35, #b44dff, #00d4ff)'; this.style.display='none';">
+            </div>
+            <div class="empty-state">
+                <div class="icon">👊</div>
+                <p>请从左侧选择一个角色查看帧数数据</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="characters.js"></script>
+    <script src="move_names_cn.js"></script>
+    <script src="char_avatars.js"></script>
+    <script>
+    // 帧数数据从 characters.js 加载，来源于 GitHub 社区项目 4rays/sf6-move-data
+    // 招式名称中文翻译从 move_names_cn.js 加载
+    // 角色头像SVG从 char_avatars.js 加载
+
+    // ============================================================
+    // 渲染逻辑
+    // ============================================================
+
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('content');
+    const searchInput = document.getElementById('searchInput');
+    let activeCharId = null;
+    let activeTab = '普通技';
+
+    // 渲染侧边栏
+    function renderSidebar(filter = '') {
+        const filtered = characters.filter(c =>
+            c.name.includes(filter) || c.nameEn.toLowerCase().includes(filter.toLowerCase())
+        );
+
+        let html = '<div class="sidebar-title">选择角色</div>';
+        filtered.forEach(char => {
+            const isActive = char.id === activeCharId ? 'active' : '';
+            const avatarUrl = getCharAvatarDataUrl(char.id);
+            html += `
+                <div class="char-item ${isActive}" data-id="${char.id}" onclick="selectChar('${char.id}')">
+                    <img src="${avatarUrl}" alt="${char.name}" class="char-avatar-img">
+                    <div class="char-info">
+                        <div class="char-name">${char.name}</div>
+                        <div class="char-name-en">${char.nameEn}</div>
+                    </div>
+                </div>
+            `;
+        });
+
+        if (filtered.length === 0) {
+            html += '<div style="padding: 16px; color: #666; text-align: center;">未找到匹配角色</div>';
+        }
+
+        sidebar.innerHTML = html;
+    }
+
+    // Tab ID映射
+    const tabIdMap = {
+        '普通技': 'normals',
+        '必杀技': 'specials',
+        'SA / 必杀技': 'supers'
+    };
+
+    // 渲染角色详情
+    function renderCharDetail(char) {
+        const avatarUrl = getCharAvatarDataUrl(char.id);
+        let html = `
+            <div class="char-header">
+                <img src="${avatarUrl}" alt="${char.name}" class="char-header-avatar-img">
+                <div class="char-header-info">
+                    <h2>${char.name}（${char.nameEn}）</h2>
+                    <p>${char.description}</p>
+                </div>
+            </div>
+        `;
+
+        // Tab 切换按钮
+        html += `
+            <div class="tab-container">
+                <button class="tab-btn ${activeTab === '普通技' ? 'active' : ''}" onclick="switchTab('普通技')">普通技</button>
+                <button class="tab-btn ${activeTab === '必杀技' ? 'active' : ''}" onclick="switchTab('必杀技')">必杀技</button>
+                <button class="tab-btn ${activeTab === 'SA / 必杀技' ? 'active' : ''}" onclick="switchTab('SA / 必杀技')">SA / 超必杀</button>
+            </div>
+        `;
+
+        // 渲染每个Tab内容
+        for (const [section, moves] of Object.entries(char.moves)) {
+            const isActive = section === activeTab ? 'active' : '';
+            const tabId = tabIdMap[section] || 'other';
+            html += `<div class="tab-content ${isActive}" id="tab-${tabId}">`;
+            html += `
+                <table class="frame-table">
+                    <thead>
+                        <tr>
+                            <th>招式名称</th>
+                            <th>伤害</th>
+                            <th>启动帧</th>
+                            <th>命中优势</th>
+                            <th>格挡优势</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            moves.forEach(move => {
+                const hitClass = getAdvClass(move.onHit);
+                const blockClass = getAdvClass(move.onBlock);
+                const noteHtml = move.note ? `<span class="note-tag">${move.note}</span>` : '';
+                // 获取中文招式名称
+                const moveNameCN = getMoveNameCN(move.name);
+                html += `
+                    <tr>
+                        <td>${moveNameCN}${noteHtml}</td>
+                        <td>${move.damage}</td>
+                        <td>${move.startup}</td>
+                        <td class="${hitClass}">${move.onHit}</td>
+                        <td class="${blockClass}">${move.onBlock}</td>
+                    </tr>
+                `;
+            });
+            html += '</tbody></table>';
+            html += '</div>';
+        }
+
+        html += `
+            <div class="data-note">
+                📊 数据来源：GitHub 社区项目 4rays/sf6-move-data，共收录 25 个角色的真实帧数数据。
+                招式名称已翻译为中文，数据可能随游戏版本更新而变化，请以游戏内实测为准。
+            </div>
+        `;
+
+        content.innerHTML = html;
+    }
+
+    // Tab 切换函数
+    function switchTab(tabName) {
+        activeTab = tabName;
+        // 更新按钮状态
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+            const tabLabels = {
+                '普通技': '普通技',
+                '必杀技': '必杀技',
+                'SA / 必杀技': 'SA / 超必杀'
+            };
+            if (btn.textContent === tabLabels[tabName]) {
+                btn.classList.add('active');
+            }
+        });
+        // 更新内容显示
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        const tabId = tabIdMap[tabName] || 'other';
+        const targetTab = document.getElementById(`tab-${tabId}`);
+        if (targetTab) {
+            targetTab.classList.add('active');
+        }
+    }
+
+    // 优势值颜色
+    function getAdvClass(val) {
+        if (val === '倒地' || val === '—') return '';
+        const num = parseInt(val);
+        if (num > 0) return 'adv-positive';
+        if (num < 0) return 'adv-negative';
+        return 'adv-zero';
+    }
+
+    // 选择角色
+    function selectChar(id) {
+        activeCharId = id;
+        activeTab = '普通技'; // 重置为普通技Tab
+        const char = characters.find(c => c.id === id);
+        renderSidebar(searchInput.value);
+        renderCharDetail(char);
+    }
+
+    // 搜索
+    searchInput.addEventListener('input', (e) => {
+        renderSidebar(e.target.value);
+    });
+
+    // ESC 清除搜索
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            searchInput.value = '';
+            renderSidebar();
+            searchInput.blur();
+        }
+    });
+
+    // 初始化
+    renderSidebar();
+    </script>
+</body>
+</html>
