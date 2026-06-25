@@ -69,6 +69,8 @@ function toggleLang() {
     if (activeCharId) {
         const char = characters.find(c => c.id === activeCharId);
         if (char) renderCharDetail(char);
+    } else {
+        renderRosterBanner();
     }
     // 更新页面标题
     document.title = currentLang === 'zh' ? '街霸6 帧数速查网' : 'SF6 Frame Data Quick Reference';
