@@ -439,23 +439,33 @@ body {
 /* 群像图横幅 */
 .roster-banner {
     width: 100%;
-    height: 100%;
+    height: 200px;
     overflow: hidden;
-    border-radius: 0;
-    margin-bottom: 0;
-    border: none;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    border: 1px solid #1e1e3a;
     background: linear-gradient(135deg, #1a1a2e, #16213e);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px;
 }
 
-.roster-banner img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: contain;
-    object-position: center center;
+.roster-banner .roster-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.roster-banner .roster-avatar:hover {
+    border-color: #00d4ff;
+    transform: scale(1.15);
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.5);
 }
 
 /* 响应式布局 */

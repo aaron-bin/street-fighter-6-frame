@@ -275,8 +275,31 @@ document.addEventListener('keydown', (e) => {
 // 初始化
 // ============================================================
 
+// 渲染群像封面
+function renderRosterBanner() {
+    const banner = document.getElementById('roster-banner');
+    if (!banner) return;
+
+    const avatars = characters.map(char => {
+        const url = getCharAvatarDataUrl(char.id);
+        const name = currentLang === 'en' ? char.nameEn : char.name;
+        return `<img src="${url}" alt="${name}" class="roster-avatar" data-id="${char.id}" title="${name}" loading="lazy">`;
+    });
+
+    banner.innerHTML = avatars.join('');
+
+    // 点击头像选择角色
+    banner.addEventListener('click', (e) => {
+        const avatar = e.target.closest('.roster-avatar');
+        if (avatar) {
+            selectChar(avatar.dataset.id);
+        }
+    });
+}
+
 // 自动聚焦搜索框
 searchInput.focus();
 
-// 渲染侧边栏
+// 渲染封面和侧边栏
+renderRosterBanner();
 renderSidebar();
