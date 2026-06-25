@@ -1,7 +1,7 @@
 ﻿const characters = [
     {
         id: 'aki',
-        name: 'A.K.I.',
+        name: '阿鬼',
         nameEn: 'A.K.I.',
         icon: '🐍',
         color: '#00ff88',
@@ -425,7 +425,7 @@
     },
     {
         id: 'deejay',
-        name: '迪杰',
+        name: '迪·杰',
         nameEn: 'Dee Jay',
         icon: '🎵',
         color: '#ffaa00',
@@ -536,7 +536,7 @@
     },
     {
         id: 'dhalsim',
-        name: '达尔锡',
+        name: '达尔西姆',
         nameEn: 'Dhalsim',
         icon: '🧘',
         color: '#ff8800',
@@ -783,7 +783,7 @@
     },
     {
         id: 'guile',
-        name: '盖尔',
+        name: '古烈',
         nameEn: 'Guile',
         icon: '✈️',
         color: '#44aa44',
@@ -1052,7 +1052,7 @@
     },
     {
         id: 'juri',
-        name: '朱莉',
+        name: '韩蛛俐',
         nameEn: 'Juri',
         icon: '🕸️',
         color: '#b44dff',
@@ -1478,7 +1478,7 @@
     },
     {
         id: 'mai',
-        name: '舞',
+        name: '不知火舞',
         nameEn: 'Mai',
         icon: '🌸',
         color: '#ff4488',
@@ -1568,7 +1568,7 @@
     },
     {
         id: 'manon',
-        name: '玛农',
+        name: '曼侬',
         nameEn: 'Manon',
         icon: '⛸️',
         color: '#ff88aa',
