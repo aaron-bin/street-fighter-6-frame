@@ -31,7 +31,7 @@ const moveNameMap = {
     'Collarbone Breaker': '锁骨破坏者',
     'Solar Plexus Strike': '太阳神经丛打击',
     'Short Shoulder': '短肩撞',
-    'Axe Kick': '斧踢',
+    'Axe Kick': '驴踢',
     'High Blade Kick': '高踢',
     'Knee Bazooka': '膝盖火箭',
     'Jazz Hands': '爵士手',
